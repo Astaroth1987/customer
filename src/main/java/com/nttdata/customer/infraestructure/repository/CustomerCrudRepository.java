@@ -3,65 +3,86 @@ package com.nttdata.customer.infraestructure.repository;
 import com.nttdata.customer.application.CustomerRepository;
 import com.nttdata.customer.domain.Customer;
 import com.nttdata.customer.infraestructure.model.dao.CustomerDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * CUSTOMERCRUDREPOSITORY: Implementa las operaciones (CRUD) del Cliente (Customer)
+ * CUSTOMERCRUDREPOSITORY.
+ * Implementa las operaciones (CRUD) del Cliente (Customer)
  */
 @Component
 public class CustomerCrudRepository implements CustomerRepository {
-    @Autowired
-    ICustomerCrudRepository repository;
+    /**
+     * Operaciones del Repositorio.
+     */
+    private final ICustomerCrudRepository repository;
 
-    /*
-    create: Regitra los datos del cliente (Personal o Empresarial)
+    /**
+     * Constructor.
+     * @param iCustomerCrudRepository
+     */
+    public CustomerCrudRepository(
+            final ICustomerCrudRepository iCustomerCrudRepository) {
+        this.repository = iCustomerCrudRepository;
+    }
+    /**
+     * Regitra los datos del cliente (Personal o Empresarial).
+     * @param customer
+     * @return Mono<Customer>
      */
     @Override
-    public Mono<Customer> create(Customer customer) {
+    public Mono<Customer> create(final Customer customer) {
         return repository.save(mapCustomerToCustomerDao(customer))
                 .map(this::mapCustomerDaoToCustomer);
     }
-    /*
-    update: Actualiza los datos del cliente (Personal o Empresarial)
+    /**
+     * Actualiza los datos del cliente (Personal o Empresarial).
+     * @param id
+     * @param customer
+     * @return Mono<Customer>
      */
     @Override
-    public Mono<Customer> update(String id, Customer customer) {
+    public Mono<Customer> update(final String id, final Customer customer) {
         return repository.findById(id)
-                .flatMap( p ->create(mapCustomerDaoToCustomer(p,customer)));
+                .flatMap(p -> create(mapCustomerDaoToCustomer(p, customer)));
 
     }
-    /*
-    delete: Elimina los datos del cliente (Personal o Empresarial)
+    /**
+     * Elimina los datos del cliente (Personal o Empresarial).
+     * @param id
+     * @return Mono<CustomerDao>
      */
     @Override
-    public Mono<CustomerDao> delete(String id) {
+    public Mono<CustomerDao> delete(final String id) {
         return repository.findById(id)
                 .flatMap(p -> repository.deleteById(p.getCode()).thenReturn(p));
     }
-    /*
-    findById: Busca por el Id (Code) los datos de un cliente (Personal o Empresarial)
+    /**
+     * Busca por el Id (Code) los datos de un cliente (Personal o Empresarial).
+     * @param id
+     * @return Mono<Customer>
      */
     @Override
-    public Mono<Customer> findById(String id) {
-        return repository.findById( (id))
-                .map( this::mapCustomerDaoToCustomer);
+    public Mono<Customer> findById(final String id) {
+        return repository.findById((id))
+                .map(this::mapCustomerDaoToCustomer);
     }
-    /*
-    findAll: Busca  los datos de todos  los clientes (Personal o Empresarial)
+    /**
+     * Busca  los datos de todos  los clientes (Personal o Empresarial).
+     * @return Flux<Customer>
      */
     @Override
     public Flux<Customer> findAll() {
         return repository.findAll()
                 .map(this::mapCustomerDaoToCustomer);
     }
-
-    /*
-    mapCustomerToCustomerDao: Crea un clase CustomerDao y asigna los datos de Customer
+    /**
+     * Crea un clase CustomerDao y asigna los datos de Customer.
+     * @param customer
+     * @return CustomerDao
      */
-    private CustomerDao mapCustomerToCustomerDao (Customer customer){
+    private CustomerDao mapCustomerToCustomerDao(final Customer customer) {
         CustomerDao customerDao = new CustomerDao();
         customerDao.setCode(customer.getCode());
         customerDao.setDocumentNumber(customer.getDocumentNumber());
@@ -72,10 +93,12 @@ public class CustomerCrudRepository implements CustomerRepository {
         customerDao.setState(customer.getState());
         return customerDao;
     }
-    /*
-    mapCustomerDaoToCustomer: Crea una clase Customer y asigna los datos de CustomerDao
+    /**
+     * Crea una clase Customer y asigna los datos de CustomerDao.
+     * @param customerDao
+     * @return Customer
      */
-    private Customer mapCustomerDaoToCustomer (CustomerDao customerDao){
+    private Customer mapCustomerDaoToCustomer(final CustomerDao customerDao) {
         Customer customer = new Customer();
         customer.setCode(customerDao.getCode());
         customer.setCustomerType(customerDao.getCustomerType());
@@ -86,10 +109,14 @@ public class CustomerCrudRepository implements CustomerRepository {
         customer.setState(customerDao.getState());
         return customer;
     }
-    /*
-    mapCustomerDaoToCustomer: Asigna el Id (Code) de CustomerDao a Customer
-    */
-    private Customer mapCustomerDaoToCustomer (CustomerDao customerDao,  Customer customer){
+    /**
+     * Asigna el Id (Code) de CustomerDao a Customer.
+     * @param customerDao
+     * @param customer
+     * @return Customer
+     */
+    private Customer mapCustomerDaoToCustomer(
+            final CustomerDao customerDao, final Customer customer) {
         customer.setCode(customerDao.getCode());
         return customer;
     }

@@ -6,13 +6,43 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * CUSTOMEROPERATIONS: Define las operaciones (CRUD) del Cliente (Customer)
+ * CUSTOMEROPERATIONS.
+ * Define las operaciones (CRUD) del Cliente (Customer).
  */
 
 public interface CustomerOperations {
-    public Mono<Customer> create(Customer customer);
-    public Mono<Customer> update(String id, Customer customer);
-    public Mono<CustomerDao> delete(String id);
-    public Mono<Customer> findById(String id);
-    public Flux<Customer> findAll();
+    /**
+     * Creación de un cliente.
+     * @param customer
+     * @return Mono<Customer>
+     */
+    Mono<Customer> create(Customer customer);
+
+    /**
+     * Actualización de datos del cliente.
+     * @param id
+     * @param customer
+     * @return Mono<Customer>
+     */
+    Mono<Customer> update(String id, Customer customer);
+
+    /**
+     * Eliminación de un cliente.
+     * @param id
+     * @return Mono<CustomerDao>
+     */
+    Mono<CustomerDao> delete(String id);
+
+    /**
+     * Busqueda por Id de cliente.
+     * @param id
+     * @return Mono<Customer>
+     */
+    Mono<Customer> findById(String id);
+
+    /**
+     * Búsqueda de todos los clientes.
+     * @return Flux<Customer>
+     */
+    Flux<Customer> findAll();
 }

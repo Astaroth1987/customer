@@ -13,29 +13,29 @@ import reactor.core.publisher.Mono;
 public interface CustomerOperations {
     /**
      * Creación de un cliente.
-     * @param customer
+     * @param customer Cliente.
      * @return Mono<Customer>
      */
     Mono<Customer> create(Customer customer);
 
     /**
      * Actualización de datos del cliente.
-     * @param id
-     * @param customer
+     * @param id Codigo de cliente.
+     * @param customer Cliente.
      * @return Mono<Customer>
      */
     Mono<Customer> update(String id, Customer customer);
 
     /**
      * Eliminación de un cliente.
-     * @param id
+     * @param id Codigo de cliente.
      * @return Mono<CustomerDao>
      */
-    Mono<CustomerDao> delete(String id);
+    Mono<Void> delete(String id);
 
     /**
      * Busqueda por Id de cliente.
-     * @param id
+     * @param id Codigo de cliente.
      * @return Mono<Customer>
      */
     Mono<Customer> findById(String id);

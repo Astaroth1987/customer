@@ -1,9 +1,7 @@
 package com.nttdata.customer.application;
 
 import com.nttdata.customer.domain.Customer;
-import com.nttdata.customer.domain.CustomerResponse;
 import com.nttdata.customer.domain.ErrorData;
-import com.nttdata.customer.infraestructure.model.dao.CustomerDao;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
@@ -25,7 +23,7 @@ public class CustomerOperationsImpl  implements CustomerOperations {
 
     /**
      * Constructor.
-     * @param customerRepository
+     * @param customerRepository Repositorio del cliente.
      */
     public CustomerOperationsImpl(final CustomerRepository customerRepository) {
         this.repository = customerRepository;
@@ -33,7 +31,7 @@ public class CustomerOperationsImpl  implements CustomerOperations {
 
     /**
      * Creación de cliente.
-     * @param customer
+     * @param customer cliente.
      * @return Mono<Customer>
      */
     @Override
@@ -48,8 +46,8 @@ public class CustomerOperationsImpl  implements CustomerOperations {
 
     /**
      * Actualización de cliente.
-      * @param id
-     * @param customer
+      * @param id identificador.
+     * @param customer cliente.
      * @return Mono<Customer>
      */
     @Override
@@ -59,17 +57,17 @@ public class CustomerOperationsImpl  implements CustomerOperations {
 
     /**
      * Elimina un cliente.
-     * @param id
+     * @param id identificador.
      * @return Mono<CustomerDao>
      */
     @Override
-    public Mono<CustomerDao> delete(final String id) {
+    public Mono<Void> delete(final String id) {
         return repository.delete(id);
     }
 
     /**
      * Busqueda por Id de un cliente.
-     * @param id
+     * @param id Identificador.
      * @return Mono<Customer>
      */
     @Override
@@ -88,26 +86,13 @@ public class CustomerOperationsImpl  implements CustomerOperations {
 
     /**
      * Validación de los datos.
-     * @param customer
+     * @param customer cliente.
      * @return boolean
      */
     public boolean validateData(final Customer customer) {
         boolean result = true;
 
-        if (customer.getCustomerType().equals("")) {
-            ErrorData error = new ErrorData();
-            error.setName("customerType");
-            error.setDescription("No debe ser vacio");
-            result = false;
-        }
-        if (customer.getDocumentType().equals("")) {
-            ErrorData error = new ErrorData();
-            error.setName("documentType");
-            error.setDescription("No debe ser vacio");
-
-            result = false;
-        }
-        if (customer.getDocumentNumber().equals("")) {
+        if ("".equals(customer.getDocumentNumber())) {
             ErrorData error = new ErrorData();
             error.setName("documentNumber");
             error.setDescription("No debe ser vacio");
@@ -116,16 +101,5 @@ public class CustomerOperationsImpl  implements CustomerOperations {
         return  result;
     }
 
-    /**
-     * Asigna el Id del cliente al Bean.
-     * @param customerResponse
-     * @param customer
-     * @return Mono<CustomerResponse>
-     */
-    private Mono<CustomerResponse> setIdCustomerResponse(
-            final CustomerResponse customerResponse, final Customer customer) {
-        log.info("[create] setIdCustomerResponse:" + customer.getCode());
-        customerResponse.setCode(customer.getCode());
-        return Mono.just(customerResponse);
-    }
+
 }

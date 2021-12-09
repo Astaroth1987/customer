@@ -20,7 +20,7 @@ public class CustomerCrudRepository implements CustomerRepository {
 
     /**
      * Constructor.
-     * @param iCustomerCrudRepository
+     * @param iCustomerCrudRepository respositorio.
      */
     public CustomerCrudRepository(
             final ICustomerCrudRepository iCustomerCrudRepository) {
@@ -28,7 +28,7 @@ public class CustomerCrudRepository implements CustomerRepository {
     }
     /**
      * Regitra los datos del cliente (Personal o Empresarial).
-     * @param customer
+     * @param customer cliente.
      * @return Mono<Customer>
      */
     @Override
@@ -38,8 +38,8 @@ public class CustomerCrudRepository implements CustomerRepository {
     }
     /**
      * Actualiza los datos del cliente (Personal o Empresarial).
-     * @param id
-     * @param customer
+     * @param id codigo de cliente.
+     * @param customer cliente.
      * @return Mono<Customer>
      */
     @Override
@@ -50,17 +50,17 @@ public class CustomerCrudRepository implements CustomerRepository {
     }
     /**
      * Elimina los datos del cliente (Personal o Empresarial).
-     * @param id
+     * @param id codigo de cliente.
      * @return Mono<CustomerDao>
      */
     @Override
-    public Mono<CustomerDao> delete(final String id) {
+    public Mono<Void> delete(final String id) {
         return repository.findById(id)
-                .flatMap(p -> repository.deleteById(p.getCode()).thenReturn(p));
+                .flatMap(p -> repository.deleteById(p.getCode()));
     }
     /**
      * Busca por el Id (Code) los datos de un cliente (Personal o Empresarial).
-     * @param id
+     * @param id codigo de cliente.
      * @return Mono<Customer>
      */
     @Override
@@ -79,7 +79,7 @@ public class CustomerCrudRepository implements CustomerRepository {
     }
     /**
      * Crea un clase CustomerDao y asigna los datos de Customer.
-     * @param customer
+     * @param customer cliente.
      * @return CustomerDao
      */
     private CustomerDao mapCustomerToCustomerDao(final Customer customer) {
@@ -95,7 +95,7 @@ public class CustomerCrudRepository implements CustomerRepository {
     }
     /**
      * Crea una clase Customer y asigna los datos de CustomerDao.
-     * @param customerDao
+     * @param customerDao cliente.
      * @return Customer
      */
     private Customer mapCustomerDaoToCustomer(final CustomerDao customerDao) {
@@ -111,8 +111,8 @@ public class CustomerCrudRepository implements CustomerRepository {
     }
     /**
      * Asigna el Id (Code) de CustomerDao a Customer.
-     * @param customerDao
-     * @param customer
+     * @param customerDao cliente.
+     * @param customer cliente.
      * @return Customer
      */
     private Customer mapCustomerDaoToCustomer(
